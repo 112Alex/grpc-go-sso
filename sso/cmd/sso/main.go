@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/112Alex/grpc-go-sso/SSO/internal/config"
+	"github.com/112Alex/grpc-go-sso/SSO/lib/logger/handlers/slogpretty"
 )
 
 const (
@@ -18,12 +19,7 @@ func main() {
 
 	log := setupLogger(cfg.Env)
 
-	log.Info("starting application",
-		slog.String("env", cfg.Env),
-		slog.Any("cfg", cfg),
-	)
-
-	log.Warn("warning message")
+	log.Info("starting application", slog.Any("config", cfg)) //NOTE: edit on prod
 
 	// TODO: initialize logger (slog)
 
@@ -36,9 +32,7 @@ func setupLogger(env string) *slog.Logger {
 
 	switch env {
 	case envLoocal:
-		log = slog.New(
-			slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
-		)
+		log = setupPrettySlog()
 	case envDev:
 		log = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
@@ -50,4 +44,16 @@ func setupLogger(env string) *slog.Logger {
 	}
 
 	return log
+}
+
+func setupPrettySlog() *slog.Logger {
+	opts := slogpretty.PrettyHandlerOptions{
+		SlogOpts: &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		},
+	}
+
+	handler := opts.NewPrettyHandler(os.Stdout)
+
+	return slog.New(handler)
 }

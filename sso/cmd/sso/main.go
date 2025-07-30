@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/112Alex/grpc-go-sso/SSO/internal/app"
 	"github.com/112Alex/grpc-go-sso/SSO/internal/config"
 	"github.com/112Alex/grpc-go-sso/SSO/lib/logger/handlers/slogpretty"
 )
@@ -19,12 +20,16 @@ func main() {
 
 	log := setupLogger(cfg.Env)
 
-	log.Info("starting application", slog.Any("config", cfg)) //NOTE: edit on prod
+	log.Info("starting application", slog.Any("config", cfg)) //NOTE: must edit on prod
 
-	// TODO: initialize logger (slog)
+	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+
+	application.GRPCSrv.MustRun()
 
 	// TODO: initialize app
-	// NOTE: Само приложение, а не точка входа
+	// NOTE: The application itself, not the entry point
+
+	//TODO: launch the gRPC server of the application.
 }
 
 func setupLogger(env string) *slog.Logger {

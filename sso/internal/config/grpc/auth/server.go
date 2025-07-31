@@ -20,7 +20,7 @@ func (s *ServerAPI) Login(
 	req *ssov1.LoginRequest,
 ) (*ssov1.LoginResponse, error) {
 	return &ssov1.LoginResponse{
-		Token: "token1234",
+		Token: req.GetEmail(),
 	}, nil
 }
 

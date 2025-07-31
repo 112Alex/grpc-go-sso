@@ -19,7 +19,9 @@ func (s *ServerAPI) Login(
 	ctx context.Context,
 	req *ssov1.LoginRequest,
 ) (*ssov1.LoginResponse, error) {
-	panic("implement me")
+	return &ssov1.LoginResponse{
+		Token: `"token1234"`,
+	}, nil
 }
 
 func (s *ServerAPI) Register(

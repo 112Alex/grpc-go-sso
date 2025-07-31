@@ -7,12 +7,11 @@
 package ssov1
 
 import (
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -180,7 +179,7 @@ func (x *LoginRequest) GetAppId() int32 {
 
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         int64                  `protobuf:"varint,1,opt,name=token,proto3" json:"token,omitempty"` // Auth token of the logged in user.
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"` // Auth token of the logged in user.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -215,11 +214,11 @@ func (*LoginResponse) Descriptor() ([]byte, []int) {
 	return file_sso_sso_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *LoginResponse) GetToken() int64 {
+func (x *LoginResponse) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
-	return 0
+	return ""
 }
 
 type IsAdminRequest struct {
@@ -325,7 +324,7 @@ const file_sso_sso_proto_rawDesc = "" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x15\n" +
 	"\x06app_id\x18\x03 \x01(\x05R\x05appId\"%\n" +
 	"\rLoginResponse\x12\x14\n" +
-	"\x05token\x18\x01 \x01(\x03R\x05token\")\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\")\n" +
 	"\x0eIsAdminRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\",\n" +
 	"\x0fIsAdminResponse\x12\x19\n" +

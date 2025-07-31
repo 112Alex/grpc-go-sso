@@ -26,7 +26,7 @@ message LoginRequest {
 }
 
 message LoginResponse {
-    int64 token = 1; // Auth token of the logged in user.
+    string token = 1; // Auth token of the logged in user.
 }
 
 message IsAdminRequest {

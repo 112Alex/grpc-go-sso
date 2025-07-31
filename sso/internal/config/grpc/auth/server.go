@@ -3,7 +3,7 @@ package auth
 import (
 	"context"
 
-	ssov1 "github.com/112Alex/grpc-go-sso/protos/gen/go/sso"
+	ssov1 "github.com/112Alex/protos/gen/go/sso"
 	"google.golang.org/grpc"
 )
 
@@ -20,7 +20,7 @@ func (s *ServerAPI) Login(
 	req *ssov1.LoginRequest,
 ) (*ssov1.LoginResponse, error) {
 	return &ssov1.LoginResponse{
-		Token: req.GetEmail(),
+		Token: "zzz123",
 	}, nil
 }
 

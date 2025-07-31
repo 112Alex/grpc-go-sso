@@ -1,7 +1,7 @@
 module github.com/112Alex/grpc-go-sso/SSO
 
 require (
-	github.com/112Alex/grpc-go-sso/protos v0.0.1
+	github.com/112Alex/protos v0.0.3
 	github.com/fatih/color v1.18.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	google.golang.org/grpc v1.74.2

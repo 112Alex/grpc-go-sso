@@ -1,5 +1,5 @@
-github.com/112Alex/grpc-go-sso/protos v0.0.1 h1:rC79r6ZlkLYiUilYifOU+o1PiSdSVzr4zRh4VeNpbxg=
-github.com/112Alex/grpc-go-sso/protos v0.0.1/go.mod h1:TCjBqbt/FGc6Rlwn0CMyi2z9R1enq28URP3ZoMV6viM=
+github.com/112Alex/protos v0.0.3 h1:uemSr1Fb+q/aWj/c/nYEqazdhDn3ZMCx8z1EEPFF4JQ=
+github.com/112Alex/protos v0.0.3/go.mod h1:4A2uso5vk6QAVt537od51rD+lzwymFfsHDDUNLAQlJc=
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/BurntSushi/toml v1.5.0 h1:W5quZX/G/csjUnuI8SUYlsHs9M38FC7znL0lIO+DvMg=
 github.com/BurntSushi/toml v1.5.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "112Alex.grpc-go-sso.v1;ssov1";
+option go_package = "112Alex/grpc-go-sso;ssov1";
 
 // Auth is service for managing permissions and roles.
 service Auth {

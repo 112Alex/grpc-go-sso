@@ -2,10 +2,15 @@ package auth
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
 	"time"
 
 	"github.com/112Alex/grpc-go-sso/SSO/internal/domain/models"
+	"github.com/112Alex/grpc-go-sso/SSO/internal/storage"
+	"github.com/112Alex/grpc-go-sso/SSO/lib/logger/sl"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Auth struct {
@@ -32,6 +37,10 @@ type UserProvider interface {
 type AppProvider interface {
 	App(ctx context.Context, appID int) (models.App, error)
 }
+
+var (
+	ErrInvalidCredentials = errors.New("invalid credentials")
+)
 
 // New returns a new instance of the Auth service.
 func New(
@@ -60,5 +69,74 @@ func (a *Auth) Login(
 	password string,
 	appID int,
 ) (string, error) {
+	const op = "auth.Login"
+
+	log := a.log.With(
+		slog.String("op", op),
+		slog.String("email", email),
+	)
+
+	log.Info("attempting to login user")
+
+	user, err := a.usrProvider.User(ctx, email)
+	if err != nil {
+		if errors.Is(err, storage.ErrUserNotFound) {
+			a.log.Warn("user not found", sl.Err(err))
+
+			return "", fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
+		}
+
+		a.log.Error("failed to get user", sl.Err(err))
+
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	if err := bcrypt.CompareHashAndPassword(user.PassHash, []byte(password)); err != nil {
+		a.log.Info("invalid credentials", sl.Err(err))
+
+		return "", fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
+	}
+	app, err := a.appProvider.App(ctx, appID)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	log.Info("user logged in successfully")
+
+}
+
+// RegisterNewUser registers a new user in the system and returns user ID.
+// If user was given alreade exists, it returns an error.
+func (a *Auth) RegisterNewUser(ctx context.Context, email string, pass string) (int64, error) {
+	const op = "auth.RegisterNewUser"
+
+	log := a.log.With(
+		slog.String("op", op),
+		slog.String("email", email),
+	)
+
+	log.Info("registering new user")
+
+	passHash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+	if err != nil {
+		log.Error("failed to generate password hash", sl.Err(err))
+
+		return 0, fmt.Errorf("%s: %w", op, err)
+	}
+
+	id, err := a.usrSaver.SaveUser(ctx, email, passHash)
+	if err != nil {
+		log.Error("failed to save user", sl.Err(err))
+
+		return 0, fmt.Errorf("%s: %w", op, err)
+	}
+
+	log.Info("user registered")
+
+	return id, nil
+}
+
+// IsAdmin checks if user is admin.
+func (a *Auth) IsAdmin(ctx context.Context, userID int64) (bool, error) {
 	panic("not implemented")
 }
